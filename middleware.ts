@@ -3,18 +3,32 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const SIGNIN_PAGE = '/auth/signin';
-const PUBLIC_AUTH_PAGES = ['/auth/signin', '/auth/error'];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  const token = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+  if (pathname === '/auth/error') {
+    return NextResponse.next();
+  }
 
-  const isPublicAuthPage = PUBLIC_AUTH_PAGES.includes(pathname);
+  let token = null;
+  try {
+    token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+  } catch {
+    if (pathname.startsWith('/app')) {
+      const url = req.nextUrl.clone();
+      url.pathname = SIGNIN_PAGE;
+      url.searchParams.set('callbackUrl', pathname);
+      return NextResponse.redirect(url);
+    }
+    return NextResponse.next();
+  }
+
   const isSignupPage = pathname === '/auth/signup';
+  const isSigninPage = pathname === '/auth/signin';
   const isAppRoute = pathname.startsWith('/app');
 
   if (isSignupPage) {
@@ -31,7 +45,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (isPublicAuthPage && token) {
+  if (isSigninPage && token) {
     const url = req.nextUrl.clone();
     url.pathname = '/app';
     url.search = '';
