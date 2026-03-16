@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,27 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  BarChart3,
-  Target,
-  Users,
-  Settings,
-  Menu,
-  X,
-  Building2,
-  ListTodo,
-  Zap,
-  CalendarDays,
-  ChevronDown,
-  Plus,
-  TrendingUp,
-  PlusSquare,
-  FileText,
-  Image,
-  Play,
-  Search,
-  CheckCircle2,
-} from 'lucide-react';
+import { ChartBar as BarChart3, Target, Users, Settings, Menu, X, Building2, ListTodo, Zap, CalendarDays, ChevronDown, Plus, TrendingUp, SquarePlus as PlusSquare, FileText, Image, Play, Search, CircleCheck as CheckCircle2, LogOut } from 'lucide-react';
 import { useWorkspace } from '@/lib/workspace-context';
 
 interface NavItem {
@@ -272,8 +253,16 @@ export function AppSidebar() {
           <NavContent />
         </div>
 
-        <div className="border-t px-4 py-3">
-          <p className="text-xs text-muted-foreground">LeadFlow MVP</p>
+        <div className="border-t px-3 py-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start gap-2 text-slate-600 hover:text-red-600 hover:bg-red-50"
+            onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </Button>
         </div>
       </div>
 
