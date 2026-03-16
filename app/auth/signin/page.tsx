@@ -3,13 +3,12 @@
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, Target } from 'lucide-react';
+import { CircleAlert as AlertCircle, Target } from 'lucide-react';
 
 function SignInForm() {
   const [email, setEmail] = useState('');
@@ -99,11 +98,8 @@ function SignInForm() {
           </Button>
         </form>
 
-        <div className="mt-6 text-center text-sm">
-          <span className="text-muted-foreground">Don&apos;t have an account? </span>
-          <Link href="/auth/signup" className="text-primary hover:underline font-medium">
-            Create one
-          </Link>
+        <div className="mt-6 text-center text-sm text-muted-foreground">
+          Contact your administrator to get access.
         </div>
       </CardContent>
     </Card>
